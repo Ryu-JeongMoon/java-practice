@@ -1,16 +1,15 @@
 package io.reflectoring.buckpal.archunit;
 
+import com.tngtech.archunit.core.domain.JavaClasses;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.tngtech.archunit.core.domain.JavaClasses;
 
 public class ApplicationLayer extends ArchitectureElement {
 
   private final HexagonalArchitecture parentContext;
-  private List<String> incomingPortsPackages = new ArrayList<>();
-  private List<String> outgoingPortsPackages = new ArrayList<>();
-  private List<String> servicePackages = new ArrayList<>();
+  private final List<String> incomingPortsPackages = new ArrayList<>();
+  private final List<String> outgoingPortsPackages = new ArrayList<>();
+  private final List<String> servicePackages = new ArrayList<>();
 
   public ApplicationLayer(String basePackage, HexagonalArchitecture parentContext) {
     super(basePackage);

@@ -4,9 +4,8 @@ import io.reflectoring.buckpal.account.application.port.in.GetAccountBalanceQuer
 import io.reflectoring.buckpal.account.application.port.out.LoadAccountPort;
 import io.reflectoring.buckpal.account.domain.Account.AccountId;
 import io.reflectoring.buckpal.account.domain.Money;
-import lombok.RequiredArgsConstructor;
-
 import java.time.LocalDateTime;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 class GetAccountBalanceService implements GetAccountBalanceQuery {
@@ -16,6 +15,6 @@ class GetAccountBalanceService implements GetAccountBalanceQuery {
   @Override
   public Money getAccountBalance(AccountId accountId) {
     return loadAccountPort.loadAccount(accountId, LocalDateTime.now())
-        .calculateBalance();
+      .calculateBalance();
   }
 }

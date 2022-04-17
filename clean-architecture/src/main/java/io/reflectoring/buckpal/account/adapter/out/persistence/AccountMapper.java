@@ -6,28 +6,27 @@ import io.reflectoring.buckpal.account.domain.Activity;
 import io.reflectoring.buckpal.account.domain.Activity.ActivityId;
 import io.reflectoring.buckpal.account.domain.ActivityWindow;
 import io.reflectoring.buckpal.account.domain.Money;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 @Component
 class AccountMapper {
 
   Account mapToDomainEntity(
-      AccountJpaEntity account,
-      List<ActivityJpaEntity> activities,
-      Long withdrawalBalance,
-      Long depositBalance) {
+    AccountJpaEntity account,
+    List<ActivityJpaEntity> activities,
+    Long withdrawalBalance,
+    Long depositBalance) {
 
     Money baselineBalance = Money.subtract(
-        Money.of(depositBalance),
-        Money.of(withdrawalBalance));
+      Money.of(depositBalance),
+      Money.of(withdrawalBalance));
 
     return Account.withId(
-        new AccountId(account.getId()),
-        baselineBalance,
-        mapToActivityWindow(activities));
+      new AccountId(account.getId()),
+      baselineBalance,
+      mapToActivityWindow(activities));
 
   }
 
@@ -36,12 +35,12 @@ class AccountMapper {
 
     for (ActivityJpaEntity activity : activities) {
       mappedActivities.add(new Activity(
-          new ActivityId(activity.getId()),
-          new AccountId(activity.getOwnerAccountId()),
-          new AccountId(activity.getSourceAccountId()),
-          new AccountId(activity.getTargetAccountId()),
-          activity.getTimestamp(),
-          Money.of(activity.getAmount())));
+        new ActivityId(activity.getId()),
+        new AccountId(activity.getOwnerAccountId()),
+        new AccountId(activity.getSourceAccountId()),
+        new AccountId(activity.getTargetAccountId()),
+        activity.getTimestamp(),
+        Money.of(activity.getAmount())));
     }
 
     return new ActivityWindow(mappedActivities);
@@ -49,12 +48,12 @@ class AccountMapper {
 
   ActivityJpaEntity mapToJpaEntity(Activity activity) {
     return new ActivityJpaEntity(
-        activity.getId() == null ? null : activity.getId().getValue(),
-        activity.getTimestamp(),
-        activity.getOwnerAccountId().getValue(),
-        activity.getSourceAccountId().getValue(),
-        activity.getTargetAccountId().getValue(),
-        activity.getMoney().getAmount().longValue());
+      activity.getId() == null ? null : activity.getId().getValue(),
+      activity.getTimestamp(),
+      activity.getOwnerAccountId().getValue(),
+      activity.getSourceAccountId().getValue(),
+      activity.getTargetAccountId().getValue(),
+      activity.getMoney().getAmount().longValue());
   }
 
 }

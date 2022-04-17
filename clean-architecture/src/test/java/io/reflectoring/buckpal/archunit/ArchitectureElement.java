@@ -1,12 +1,13 @@
 package io.reflectoring.buckpal.archunit;
 
-import java.util.List;
+import static com.tngtech.archunit.base.DescribedPredicate.greaterThanOrEqualTo;
+import static com.tngtech.archunit.lang.conditions.ArchConditions.containNumberOfElements;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
-import static com.tngtech.archunit.base.DescribedPredicate.*;
-import static com.tngtech.archunit.lang.conditions.ArchConditions.*;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
+import java.util.List;
 
 abstract class ArchitectureElement {
 
@@ -16,31 +17,27 @@ abstract class ArchitectureElement {
     this.basePackage = basePackage;
   }
 
-  String fullQualifiedPackage(String relativePackage) {
-    return this.basePackage + "." + relativePackage;
-  }
-
   static void denyDependency(String fromPackageName, String toPackageName, JavaClasses classes) {
     noClasses()
-        .that()
-        .resideInAPackage("io.reflectoring.reviewapp.domain..")
-        .should()
-        .dependOnClassesThat()
-        .resideInAnyPackage("io.reflectoring.reviewapp.application..")
-        .check(classes);
+      .that()
+      .resideInAPackage("io.reflectoring.reviewapp.domain..")
+      .should()
+      .dependOnClassesThat()
+      .resideInAnyPackage("io.reflectoring.reviewapp.application..")
+      .check(classes);
   }
 
   static void denyAnyDependency(
-      List<String> fromPackages, List<String> toPackages, JavaClasses classes) {
+    List<String> fromPackages, List<String> toPackages, JavaClasses classes) {
     for (String fromPackage : fromPackages) {
       for (String toPackage : toPackages) {
         noClasses()
-            .that()
-            .resideInAPackage(matchAllClassesInPackage(fromPackage))
-            .should()
-            .dependOnClassesThat()
-            .resideInAnyPackage(matchAllClassesInPackage(toPackage))
-            .check(classes);
+          .that()
+          .resideInAPackage(matchAllClassesInPackage(fromPackage))
+          .should()
+          .dependOnClassesThat()
+          .resideInAnyPackage(matchAllClassesInPackage(toPackage))
+          .check(classes);
       }
     }
   }
@@ -49,12 +46,16 @@ abstract class ArchitectureElement {
     return packageName + "..";
   }
 
+  String fullQualifiedPackage(String relativePackage) {
+    return this.basePackage + "." + relativePackage;
+  }
+
   void denyEmptyPackage(String packageName) {
     classes()
-        .that()
-        .resideInAPackage(matchAllClassesInPackage(packageName))
-        .should(containNumberOfElements(greaterThanOrEqualTo(1)))
-        .check(classesInPackage(packageName));
+      .that()
+      .resideInAPackage(matchAllClassesInPackage(packageName))
+      .should(containNumberOfElements(greaterThanOrEqualTo(1)))
+      .check(classesInPackage(packageName));
   }
 
   private JavaClasses classesInPackage(String packageName) {

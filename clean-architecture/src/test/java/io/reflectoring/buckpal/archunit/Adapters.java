@@ -1,15 +1,14 @@
 package io.reflectoring.buckpal.archunit;
 
+import com.tngtech.archunit.core.domain.JavaClasses;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.tngtech.archunit.core.domain.JavaClasses;
 
 public class Adapters extends ArchitectureElement {
 
   private final HexagonalArchitecture parentContext;
-  private List<String> incomingAdapterPackages = new ArrayList<>();
-  private List<String> outgoingAdapterPackages = new ArrayList<>();
+  private final List<String> incomingAdapterPackages = new ArrayList<>();
+  private final List<String> outgoingAdapterPackages = new ArrayList<>();
 
   Adapters(HexagonalArchitecture parentContext, String basePackage) {
     super(basePackage);

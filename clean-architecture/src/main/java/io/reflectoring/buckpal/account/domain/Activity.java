@@ -1,11 +1,10 @@
 package io.reflectoring.buckpal.account.domain;
 
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-
-import java.time.LocalDateTime;
 
 /**
  * A money transfer activity between {@link Account}s.
@@ -53,11 +52,11 @@ public class Activity {
   private final Money money;
 
   public Activity(
-      @NonNull Account.AccountId ownerAccountId,
-      @NonNull Account.AccountId sourceAccountId,
-      @NonNull Account.AccountId targetAccountId,
-      @NonNull LocalDateTime timestamp,
-      @NonNull Money money) {
+    @NonNull Account.AccountId ownerAccountId,
+    @NonNull Account.AccountId sourceAccountId,
+    @NonNull Account.AccountId targetAccountId,
+    @NonNull LocalDateTime timestamp,
+    @NonNull Money money) {
     this.id = null;
     this.ownerAccountId = ownerAccountId;
     this.sourceAccountId = sourceAccountId;
@@ -68,6 +67,7 @@ public class Activity {
 
   @Value
   public static class ActivityId {
+
     private final Long value;
   }
 

@@ -8,10 +8,9 @@ import io.reflectoring.buckpal.account.application.port.out.UpdateAccountStatePo
 import io.reflectoring.buckpal.account.domain.Account;
 import io.reflectoring.buckpal.account.domain.Account.AccountId;
 import io.reflectoring.buckpal.common.UseCase;
-import lombok.RequiredArgsConstructor;
-
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import javax.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @UseCase
@@ -25,23 +24,22 @@ public class SendMoneyService implements SendMoneyUseCase {
 
   @Override
   public boolean sendMoney(SendMoneyCommand command) {
-
     checkThreshold(command);
 
     LocalDateTime baselineDate = LocalDateTime.now().minusDays(10);
 
     Account sourceAccount = loadAccountPort.loadAccount(
-        command.getSourceAccountId(),
-        baselineDate);
+      command.getSourceAccountId(),
+      baselineDate);
 
     Account targetAccount = loadAccountPort.loadAccount(
-        command.getTargetAccountId(),
-        baselineDate);
+      command.getTargetAccountId(),
+      baselineDate);
 
     AccountId sourceAccountId = sourceAccount.getId()
-        .orElseThrow(() -> new IllegalStateException("expected source account ID not to be empty"));
+      .orElseThrow(() -> new IllegalStateException("expected source account ID not to be empty"));
     AccountId targetAccountId = targetAccount.getId()
-        .orElseThrow(() -> new IllegalStateException("expected target account ID not to be empty"));
+      .orElseThrow(() -> new IllegalStateException("expected target account ID not to be empty"));
 
     accountLock.lockAccount(sourceAccountId);
     if (!sourceAccount.withdraw(command.getMoney(), targetAccountId)) {
@@ -65,11 +63,9 @@ public class SendMoneyService implements SendMoneyUseCase {
   }
 
   private void checkThreshold(SendMoneyCommand command) {
-    if (command.getMoney().isGreaterThan(moneyTransferProperties.getMaximumTransferThreshold())) {
+    if (command.getMoney().isGreaterThan(moneyTransferProperties.getMaximumTransferThreshold()))
       throw new ThresholdExceededException(moneyTransferProperties.getMaximumTransferThreshold(), command.getMoney());
-    }
   }
-
 }
 
 

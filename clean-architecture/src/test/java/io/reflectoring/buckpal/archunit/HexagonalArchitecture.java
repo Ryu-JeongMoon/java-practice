@@ -1,24 +1,23 @@
 package io.reflectoring.buckpal.archunit;
 
+import com.tngtech.archunit.core.domain.JavaClasses;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import com.tngtech.archunit.core.domain.JavaClasses;
 
 public class HexagonalArchitecture extends ArchitectureElement {
 
   private Adapters adapters;
   private ApplicationLayer applicationLayer;
   private String configurationPackage;
-  private List<String> domainPackages = new ArrayList<>();
-
-  public static HexagonalArchitecture boundedContext(String basePackage) {
-    return new HexagonalArchitecture(basePackage);
-  }
+  private final List<String> domainPackages = new ArrayList<>();
 
   public HexagonalArchitecture(String basePackage) {
     super(basePackage);
+  }
+
+  public static HexagonalArchitecture boundedContext(String basePackage) {
+    return new HexagonalArchitecture(basePackage);
   }
 
   public Adapters withAdaptersLayer(String adaptersPackage) {
@@ -43,9 +42,9 @@ public class HexagonalArchitecture extends ArchitectureElement {
 
   private void domainDoesNotDependOnOtherPackages(JavaClasses classes) {
     denyAnyDependency(
-        this.domainPackages, Collections.singletonList(adapters.basePackage), classes);
+      this.domainPackages, Collections.singletonList(adapters.basePackage), classes);
     denyAnyDependency(
-        this.domainPackages, Collections.singletonList(applicationLayer.basePackage), classes);
+      this.domainPackages, Collections.singletonList(applicationLayer.basePackage), classes);
   }
 
   public void check(JavaClasses classes) {
