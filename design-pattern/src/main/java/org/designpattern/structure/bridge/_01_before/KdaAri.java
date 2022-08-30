@@ -27,7 +27,6 @@ public class KdaAri implements Champion {
 		System.out.println("KDA 아리 R");
 	}
 
-	@Override
 	public String getName() {
 		return null;
 	}

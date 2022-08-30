@@ -27,7 +27,6 @@ public class PoolPartyAri implements Champion {
 		System.out.println("PoolParty R");
 	}
 
-	@Override
 	public String getName() {
 		return null;
 	}
