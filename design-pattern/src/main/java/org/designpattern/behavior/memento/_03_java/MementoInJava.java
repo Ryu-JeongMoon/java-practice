@@ -26,7 +26,8 @@ public class MementoInJava {
 
 		// de-serialization
 		try (FileInputStream fileIn = new FileInputStream("GameSave.hex");
-				 ObjectInputStream in = new ObjectInputStream(fileIn)) {
+				 ObjectInputStream in = new ObjectInputStream(fileIn)
+		) {
 			originator = (Originator)in.readObject();
 			System.out.println(originator.getBlueTeamScore());
 			System.out.println(originator.getRedTeamScore());
