@@ -14,19 +14,19 @@ import java.net.Socket;
 
 public class SingleThreadWebServer {
 
-	public static void main(String[] args) throws IOException {
-		// 한번에 하나의 요청만 처리 가능한 웹 서버
-		try (ServerSocket socket = new ServerSocket(80)) {
-			while (true) {
-				Socket connection = socket.accept();
-				handleRequest(connection);
-			}
-		}
-	}
+  public static void main(String[] args) throws IOException {
+    // 한번에 하나의 요청만 처리 가능한 웹 서버
+    try (ServerSocket socket = new ServerSocket(80)) {
+      while (true) {
+        Socket connection = socket.accept();
+        handleRequest(connection);
+      }
+    }
+  }
 
-	private static void handleRequest(Socket connection) {
-		// request-handling logic here
-	}
+  private static void handleRequest(Socket connection) {
+    // request-handling logic here
+  }
 }
 
 /*

@@ -18,51 +18,51 @@ import java.util.logging.Logger;
  */
 public class LifecycleWebServer {
 
-	private final ExecutorService exec = Executors.newCachedThreadPool();
+  private final ExecutorService exec = Executors.newCachedThreadPool();
 
-	public void start() throws IOException {
-		try (ServerSocket socket = new ServerSocket(80)) {
-			while (!exec.isShutdown()) {
-				try (final Socket conn = socket.accept()) {
-					exec.execute(() -> handleRequest(conn));
-				} catch (RejectedExecutionException e) {
-					if (!exec.isShutdown()) {
-						log("task submission rejected", e);
-					}
-				}
-			}
-		}
-	}
+  public void start() throws IOException {
+    try (ServerSocket socket = new ServerSocket(80)) {
+      while (!exec.isShutdown()) {
+        try (final Socket conn = socket.accept()) {
+          exec.execute(() -> handleRequest(conn));
+        } catch (RejectedExecutionException e) {
+          if (!exec.isShutdown()) {
+            log("task submission rejected", e);
+          }
+        }
+      }
+    }
+  }
 
-	public void stop() {
-		exec.shutdown();
-	}
+  public void stop() {
+    exec.shutdown();
+  }
 
-	private void log(String msg, Exception e) {
-		Logger.getAnonymousLogger().log(Level.WARNING, msg, e);
-	}
+  private void log(String msg, Exception e) {
+    Logger.getAnonymousLogger().log(Level.WARNING, msg, e);
+  }
 
-	void handleRequest(Socket connection) {
-		Request req = readRequest(connection);
-		if (isShutdownRequest(req)) {
-			stop();
-		} else {
-			dispatchRequest(req);
-		}
-	}
+  void handleRequest(Socket connection) {
+    Request req = readRequest(connection);
+    if (isShutdownRequest(req)) {
+      stop();
+    } else {
+      dispatchRequest(req);
+    }
+  }
 
-	private Request readRequest(Socket s) {
-		return null;
-	}
+  private Request readRequest(Socket s) {
+    return null;
+  }
 
-	private void dispatchRequest(Request r) {
-	}
+  private void dispatchRequest(Request r) {
+  }
 
-	private boolean isShutdownRequest(Request r) {
-		return false;
-	}
+  private boolean isShutdownRequest(Request r) {
+    return false;
+  }
 
-	interface Request {
+  interface Request {
 
-	}
+  }
 }

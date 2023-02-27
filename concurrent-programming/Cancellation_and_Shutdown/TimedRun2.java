@@ -1,10 +1,10 @@
 package net.jcip.examples;
 
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import static java.util.concurrent.Executors.newScheduledThreadPool;
 import static net.jcip.examples.LaunderThrowable.launderThrowable;
+
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * TimedRun2
@@ -15,32 +15,32 @@ import static net.jcip.examples.LaunderThrowable.launderThrowable;
  */
 public class TimedRun2 {
 
-	private static final ScheduledExecutorService cancelExec = newScheduledThreadPool(1);
+  private static final ScheduledExecutorService cancelExec = newScheduledThreadPool(1);
 
-	public static void timedRun(final Runnable r, long timeout, TimeUnit unit) throws InterruptedException {
-		class ReThrowableTask implements Runnable {
+  public static void timedRun(final Runnable r, long timeout, TimeUnit unit) throws InterruptedException {
+    class ReThrowableTask implements Runnable {
 
-			private volatile Throwable t;
+      private volatile Throwable t;
 
-			public void run() {
-				try {
-					r.run();
-				} catch (Throwable t) {
-					this.t = t;
-				}
-			}
+      public void run() {
+        try {
+          r.run();
+        } catch (Throwable t) {
+          this.t = t;
+        }
+      }
 
-			void rethrow() {
-				if (t != null)
-					throw launderThrowable(t);
-			}
-		}
+      void rethrow() {
+        if (t != null)
+          throw launderThrowable(t);
+      }
+    }
 
-		ReThrowableTask task = new ReThrowableTask();
-		final Thread taskThread = new Thread(task);
-		taskThread.start();
-		cancelExec.schedule(taskThread::interrupt, timeout, unit);
-		taskThread.join(unit.toMillis(timeout));
-		task.rethrow();
-	}
+    ReThrowableTask task = new ReThrowableTask();
+    final Thread taskThread = new Thread(task);
+    taskThread.start();
+    cancelExec.schedule(taskThread::interrupt, timeout, unit);
+    taskThread.join(unit.toMillis(timeout));
+    task.rethrow();
+  }
 }

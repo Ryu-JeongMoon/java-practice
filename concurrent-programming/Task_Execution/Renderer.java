@@ -1,9 +1,13 @@
 package net.jcip.examples;
 
-import java.util.List;
-import java.util.concurrent.*;
-
 import static net.jcip.examples.LaunderThrowable.launderThrowable;
+
+import java.util.List;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 /**
  * basic.oop.Renderer
@@ -14,46 +18,46 @@ import static net.jcip.examples.LaunderThrowable.launderThrowable;
  */
 public abstract class Renderer {
 
-	private final ExecutorService executor;
+  private final ExecutorService executor;
 
-	Renderer(ExecutorService executor) {
-		this.executor = executor;
-	}
+  Renderer(ExecutorService executor) {
+    this.executor = executor;
+  }
 
-	void renderPage(CharSequence source) {
-		final List<ImageInfo> info = scanForImageInfo(source);
-		CompletionService<ImageData> completionService = new ExecutorCompletionService<>(executor);
-		for (final ImageInfo imageInfo : info) {
-			completionService.submit(imageInfo::downloadImage);
-		}
+  void renderPage(CharSequence source) {
+    final List<ImageInfo> info = scanForImageInfo(source);
+    CompletionService<ImageData> completionService = new ExecutorCompletionService<>(executor);
+    for (final ImageInfo imageInfo : info) {
+      completionService.submit(imageInfo::downloadImage);
+    }
 
-		renderText(source);
+    renderText(source);
 
-		try {
-			for (int t = 0, n = info.size(); t < n; t++) {
-				Future<ImageData> f = completionService.take();
-				ImageData imageData = f.get();
-				renderImage(imageData);
-			}
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-		} catch (ExecutionException e) {
-			throw launderThrowable(e.getCause());
-		}
-	}
+    try {
+      for (int t = 0, n = info.size(); t < n; t++) {
+        Future<ImageData> f = completionService.take();
+        ImageData imageData = f.get();
+        renderImage(imageData);
+      }
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    } catch (ExecutionException e) {
+      throw launderThrowable(e.getCause());
+    }
+  }
 
-	abstract void renderText(CharSequence s);
+  abstract void renderText(CharSequence s);
 
-	abstract List<ImageInfo> scanForImageInfo(CharSequence s);
+  abstract List<ImageInfo> scanForImageInfo(CharSequence s);
 
-	abstract void renderImage(ImageData i);
+  abstract void renderImage(ImageData i);
 
-	interface ImageData {
+  interface ImageData {
 
-	}
+  }
 
-	interface ImageInfo {
+  interface ImageInfo {
 
-		ImageData downloadImage();
-	}
+    ImageData downloadImage();
+  }
 }

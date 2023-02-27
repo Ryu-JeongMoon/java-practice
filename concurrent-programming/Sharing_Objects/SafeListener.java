@@ -9,33 +9,33 @@ package net.jcip.examples;
  */
 public class SafeListener {
 
-	private final EventListener listener;
+  private final EventListener listener;
 
-	private SafeListener() {
-		listener = this::doSomething;
-	}
+  private SafeListener() {
+    listener = this::doSomething;
+  }
 
-	public static SafeListener newInstance(EventSource source) {
-		SafeListener safe = new SafeListener();
-		source.registerListener(safe.listener);
-		return safe;
-	}
+  public static SafeListener newInstance(EventSource source) {
+    SafeListener safe = new SafeListener();
+    source.registerListener(safe.listener);
+    return safe;
+  }
 
-	void doSomething(Event e) {
-	}
+  void doSomething(Event e) {
+  }
 
-	interface EventSource {
+  interface EventSource {
 
-		void registerListener(EventListener e);
-	}
+    void registerListener(EventListener e);
+  }
 
-	interface EventListener {
+  interface EventListener {
 
-		void onEvent(Event e);
-	}
+    void onEvent(Event e);
+  }
 
-	interface Event {
+  interface Event {
 
-	}
+  }
 }
 

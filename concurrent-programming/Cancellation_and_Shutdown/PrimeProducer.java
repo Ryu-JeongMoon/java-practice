@@ -12,33 +12,33 @@ import java.util.concurrent.BlockingQueue;
  */
 public class PrimeProducer extends Thread {
 
-	private final BlockingQueue<BigInteger> queue;
+  private final BlockingQueue<BigInteger> queue;
 
-	PrimeProducer(BlockingQueue<BigInteger> queue) {
-		this.queue = queue;
-	}
+  PrimeProducer(BlockingQueue<BigInteger> queue) {
+    this.queue = queue;
+  }
 
-	@Override
-	public void run() {
-		try {
-			BigInteger p = BigInteger.ONE;
+  @Override
+  public void run() {
+    try {
+      BigInteger p = BigInteger.ONE;
 
-			// it is not necessary to check the interrupted status of the thread
-			// though it is a good practice to do so, put is maybe long-time consumed operation
-			while (!Thread.currentThread().isInterrupted()) {
+      // it is not necessary to check the interrupted status of the thread
+      // though it is a good practice to do so, put is maybe long-time consumed operation
+      while (!Thread.currentThread().isInterrupted()) {
 
-				// put is a blocking method, so it will check the interrupted status of the thread
-				queue.put(p = p.nextProbablePrime());
-			}
-		} catch (InterruptedException consumed) {
-			// it is anti pattern to swallow the exception,
-			// but it is not necessary to handle the exception or re-throw it
-		}
-	}
+        // put is a blocking method, so it will check the interrupted status of the thread
+        queue.put(p = p.nextProbablePrime());
+      }
+    } catch (InterruptedException consumed) {
+      // it is anti pattern to swallow the exception,
+      // but it is not necessary to handle the exception or re-throw it
+    }
+  }
 
-	public void cancel() {
-		interrupt();
-	}
+  public void cancel() {
+    interrupt();
+  }
 }
 
 /*

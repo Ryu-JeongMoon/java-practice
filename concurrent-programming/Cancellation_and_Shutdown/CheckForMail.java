@@ -15,27 +15,27 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class CheckForMail {
 
-	@SuppressWarnings("ResultOfMethodCallIgnored")
-	public boolean checkMail(Set<String> hosts, long timeout, TimeUnit unit) throws InterruptedException {
-		ExecutorService exec = Executors.newCachedThreadPool();
-		final AtomicBoolean hasNewMail = new AtomicBoolean(false);
+  @SuppressWarnings("ResultOfMethodCallIgnored")
+  public boolean checkMail(Set<String> hosts, long timeout, TimeUnit unit) throws InterruptedException {
+    ExecutorService exec = Executors.newCachedThreadPool();
+    final AtomicBoolean hasNewMail = new AtomicBoolean(false);
 
-		try {
-			for (final String host : hosts)
-				exec.execute(() -> {
-					if (checkMail(host)) {
-						hasNewMail.set(true);
-					}
-				});
-		} finally {
-			exec.shutdown();
-			exec.awaitTermination(timeout, unit);
-		}
-		return hasNewMail.get();
-	}
+    try {
+      for (final String host : hosts)
+        exec.execute(() -> {
+          if (checkMail(host)) {
+            hasNewMail.set(true);
+          }
+        });
+    } finally {
+      exec.shutdown();
+      exec.awaitTermination(timeout, unit);
+    }
+    return hasNewMail.get();
+  }
 
-	private boolean checkMail(String host) {
-		// Check for mail
-		return false;
-	}
+  private boolean checkMail(String host) {
+    // Check for mail
+    return false;
+  }
 }

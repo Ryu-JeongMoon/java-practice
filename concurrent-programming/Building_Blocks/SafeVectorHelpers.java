@@ -12,31 +12,31 @@ import java.util.Vector;
  */
 public class SafeVectorHelpers {
 
-	public static Object getLast(Vector<?> list) {
-		//noinspection SynchronizationOnLocalVariableOrMethodParameter
-		synchronized (list) {
-			int lastIndex = list.size() - 1;
-			return list.get(lastIndex);
-		}
-	}
+  public static Object getLast(Vector<?> list) {
+    //noinspection SynchronizationOnLocalVariableOrMethodParameter
+    synchronized (list) {
+      int lastIndex = list.size() - 1;
+      return list.get(lastIndex);
+    }
+  }
 
-	@SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
-	public static void deleteLast(Vector<?> list) {
-		synchronized (list) {
-			int lastIndex = list.size() - 1;
-			list.remove(lastIndex);
-		}
-	}
+  @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
+  public static void deleteLast(Vector<?> list) {
+    synchronized (list) {
+      int lastIndex = list.size() - 1;
+      list.remove(lastIndex);
+    }
+  }
 
-	@SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
-	public static void main(String[] args) {
-		Vector<Integer> vector = new Vector<>(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
-		synchronized (vector) {
-			for (Integer result : vector) {
-				System.out.println("result = " + result);
-			}
-		}
-	}
+  @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
+  public static void main(String[] args) {
+    Vector<Integer> vector = new Vector<>(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+    synchronized (vector) {
+      for (Integer result : vector) {
+        System.out.println("result = " + result);
+      }
+    }
+  }
 }
 
 /*

@@ -11,74 +11,74 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class DynamicOrderDeadlock {
 
-	// Warning: deadlock-prone!
-	public static void transferMoney(
-			Account fromAccount,
-			Account toAccount,
-			DollarAmount amount
-	) throws InsufficientFundsException {
+  // Warning: deadlock-prone!
+  public static void transferMoney(
+    Account fromAccount,
+    Account toAccount,
+    DollarAmount amount
+  ) throws InsufficientFundsException {
 
-		synchronized (fromAccount) {
-			synchronized (toAccount) {
-				if (fromAccount.getBalance().compareTo(amount) < 0) {
-					throw new InsufficientFundsException();
-				} else {
-					fromAccount.debit(amount);
-					toAccount.credit(amount);
-				}
-			}
-		}
-	}
+    synchronized (fromAccount) {
+      synchronized (toAccount) {
+        if (fromAccount.getBalance().compareTo(amount) < 0) {
+          throw new InsufficientFundsException();
+        } else {
+          fromAccount.debit(amount);
+          toAccount.credit(amount);
+        }
+      }
+    }
+  }
 
-	static class DollarAmount implements Comparable<DollarAmount> {
-		// Needs implementation
+  static class DollarAmount implements Comparable<DollarAmount> {
+    // Needs implementation
 
-		public DollarAmount(int amount) {
-		}
+    public DollarAmount(int amount) {
+    }
 
-		public DollarAmount add(DollarAmount d) {
-			return null;
-		}
+    public DollarAmount add(DollarAmount d) {
+      return null;
+    }
 
-		public DollarAmount subtract(DollarAmount d) {
-			return null;
-		}
+    public DollarAmount subtract(DollarAmount d) {
+      return null;
+    }
 
-		public int compareTo(DollarAmount dollarAmount) {
-			return 0;
-		}
-	}
+    public int compareTo(DollarAmount dollarAmount) {
+      return 0;
+    }
+  }
 
-	static class Account {
+  static class Account {
 
-		private static final AtomicInteger sequence = new AtomicInteger();
+    private static final AtomicInteger sequence = new AtomicInteger();
 
-		private final int acctNo;
+    private final int acctNo;
 
-		private DollarAmount balance;
+    private DollarAmount balance;
 
-		public Account() {
-			acctNo = sequence.incrementAndGet();
-		}
+    public Account() {
+      acctNo = sequence.incrementAndGet();
+    }
 
-		void debit(DollarAmount d) {
-			balance = balance.subtract(d);
-		}
+    void debit(DollarAmount d) {
+      balance = balance.subtract(d);
+    }
 
-		void credit(DollarAmount d) {
-			balance = balance.add(d);
-		}
+    void credit(DollarAmount d) {
+      balance = balance.add(d);
+    }
 
-		DollarAmount getBalance() {
-			return balance;
-		}
+    DollarAmount getBalance() {
+      return balance;
+    }
 
-		int getAcctNo() {
-			return acctNo;
-		}
-	}
+    int getAcctNo() {
+      return acctNo;
+    }
+  }
 
-	static class InsufficientFundsException extends Exception {
+  static class InsufficientFundsException extends Exception {
 
-	}
+  }
 }

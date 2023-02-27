@@ -14,36 +14,36 @@ import java.util.concurrent.Semaphore;
  */
 public class BoundedHashSet<T> {
 
-	private final Set<T> set;
-	private final Semaphore sem;
+  private final Set<T> set;
+  private final Semaphore sem;
 
-	public BoundedHashSet(int bound) {
-		this.set = Collections.synchronizedSet(new HashSet<>());
-		sem = new Semaphore(bound);
-	}
+  public BoundedHashSet(int bound) {
+    this.set = Collections.synchronizedSet(new HashSet<>());
+    sem = new Semaphore(bound);
+  }
 
-	public boolean add(T o) throws InterruptedException {
-		sem.acquire();
-		boolean wasAdded = false;
-		try {
-			wasAdded = set.add(o);
-			return wasAdded;
-		} finally {
-			if (!wasAdded) {
-				sem.release();
-			}
-		}
-	}
+  public boolean add(T o) throws InterruptedException {
+    sem.acquire();
+    boolean wasAdded = false;
+    try {
+      wasAdded = set.add(o);
+      return wasAdded;
+    } finally {
+      if (!wasAdded) {
+        sem.release();
+      }
+    }
+  }
 
-	public boolean remove(Object o) {
-		//noinspection SuspiciousMethodCalls
-		boolean wasRemoved = set.remove(o);
-		if (wasRemoved) {
-			sem.release();
-		}
+  public boolean remove(Object o) {
+    //noinspection SuspiciousMethodCalls
+    boolean wasRemoved = set.remove(o);
+    if (wasRemoved) {
+      sem.release();
+    }
 
-		return wasRemoved;
-	}
+    return wasRemoved;
+  }
 }
 
 /*

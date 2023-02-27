@@ -1,7 +1,6 @@
 package net.jcip.examples;
 
-import net.jcip.annotations.GuardedBy;
-import net.jcip.annotations.ThreadSafe;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -9,8 +8,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import static java.util.concurrent.TimeUnit.SECONDS;
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
 
 /**
  * PrimeGenerator
@@ -22,45 +21,45 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 @ThreadSafe
 public class PrimeGenerator implements Runnable {
 
-	private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
+  private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
 
-	@GuardedBy("this")
-	private final List<BigInteger> primes = new ArrayList<>();
+  @GuardedBy("this")
+  private final List<BigInteger> primes = new ArrayList<>();
 
-	// it should be volatile to make sure that the value is visible to all threads
-	private volatile boolean cancelled;
+  // it should be volatile to make sure that the value is visible to all threads
+  private volatile boolean cancelled;
 
-	static List<BigInteger> aSecondOfPrimes() throws InterruptedException {
-		PrimeGenerator generator = new PrimeGenerator();
-		EXECUTOR_SERVICE.execute(generator);
+  static List<BigInteger> aSecondOfPrimes() throws InterruptedException {
+    PrimeGenerator generator = new PrimeGenerator();
+    EXECUTOR_SERVICE.execute(generator);
 
-		try {
-			SECONDS.sleep(1);
-		} finally {
-			generator.cancel();
-		}
+    try {
+      SECONDS.sleep(1);
+    } finally {
+      generator.cancel();
+    }
 
-		return generator.get();
-	}
+    return generator.get();
+  }
 
-	@Override
-	public void run() {
-		BigInteger p = BigInteger.ONE;
+  @Override
+  public void run() {
+    BigInteger p = BigInteger.ONE;
 
-		// busy waiting ...
-		while (!cancelled) {
-			p = p.nextProbablePrime();
-			synchronized (this) {
-				primes.add(p);
-			}
-		}
-	}
+    // busy waiting ...
+    while (!cancelled) {
+      p = p.nextProbablePrime();
+      synchronized (this) {
+        primes.add(p);
+      }
+    }
+  }
 
-	public void cancel() {
-		cancelled = true;
-	}
+  public void cancel() {
+    cancelled = true;
+  }
 
-	public synchronized List<BigInteger> get() {
-		return Collections.unmodifiableList(primes);
-	}
+  public synchronized List<BigInteger> get() {
+    return Collections.unmodifiableList(primes);
+  }
 }

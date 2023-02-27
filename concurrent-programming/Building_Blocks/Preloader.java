@@ -13,33 +13,33 @@ import java.util.concurrent.FutureTask;
 
 public class Preloader {
 
-	private final FutureTask<ProductInfo> future = new FutureTask<>(this::loadProductInfo);
-	private final Thread thread = new Thread(future);
+  private final FutureTask<ProductInfo> future = new FutureTask<>(this::loadProductInfo);
+  private final Thread thread = new Thread(future);
 
-	ProductInfo loadProductInfo() {
-		return null;
-	}
+  ProductInfo loadProductInfo() {
+    return null;
+  }
 
-	public void start() {
-		thread.start();
-	}
+  public void start() {
+    thread.start();
+  }
 
-	public ProductInfo get() throws DataLoadException, InterruptedException {
-		try {
-			return future.get();
-		} catch (ExecutionException e) {
-			Throwable cause = e.getCause();
-			if (cause instanceof DataLoadException) {
-				throw (DataLoadException) cause;
-			} else {
-				throw LaunderThrowable.launderThrowable(cause);
-			}
-		}
-	}
+  public ProductInfo get() throws DataLoadException, InterruptedException {
+    try {
+      return future.get();
+    } catch (ExecutionException e) {
+      Throwable cause = e.getCause();
+      if (cause instanceof DataLoadException) {
+        throw (DataLoadException) cause;
+      } else {
+        throw LaunderThrowable.launderThrowable(cause);
+      }
+    }
+  }
 
-	interface ProductInfo {
+  interface ProductInfo {
 
-	}
+  }
 }
 
 class DataLoadException extends Exception {

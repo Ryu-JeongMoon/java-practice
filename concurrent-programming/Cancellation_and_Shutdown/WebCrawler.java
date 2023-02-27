@@ -1,6 +1,6 @@
 package net.jcip.examples;
 
-import net.jcip.annotations.GuardedBy;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import java.net.URL;
 import java.util.HashSet;
@@ -10,8 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import net.jcip.annotations.GuardedBy;
 
 /**
  * WebCrawler
@@ -22,80 +21,80 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  */
 public abstract class WebCrawler {
 
-	private static final long TIMEOUT = 500;
+  private static final long TIMEOUT = 500;
 
-	private static final TimeUnit UNIT = MILLISECONDS;
+  private static final TimeUnit UNIT = MILLISECONDS;
 
-	@GuardedBy("this")
-	private final Set<URL> urlsToCrawl = new HashSet<>();
+  @GuardedBy("this")
+  private final Set<URL> urlsToCrawl = new HashSet<>();
 
-	private final ConcurrentMap<URL, Boolean> seen = new ConcurrentHashMap<>();
+  private final ConcurrentMap<URL, Boolean> seen = new ConcurrentHashMap<>();
 
-	private volatile TrackingExecutor exec;
+  private volatile TrackingExecutor exec;
 
-	public WebCrawler(URL startUrl) {
-		urlsToCrawl.add(startUrl);
-	}
+  public WebCrawler(URL startUrl) {
+    urlsToCrawl.add(startUrl);
+  }
 
-	public synchronized void start() {
-		exec = new TrackingExecutor(Executors.newCachedThreadPool());
-		for (URL url : urlsToCrawl) {
-			submitCrawlTask(url);
-		}
-		urlsToCrawl.clear();
-	}
+  public synchronized void start() {
+    exec = new TrackingExecutor(Executors.newCachedThreadPool());
+    for (URL url : urlsToCrawl) {
+      submitCrawlTask(url);
+    }
+    urlsToCrawl.clear();
+  }
 
-	public synchronized void stop() throws InterruptedException {
-		try {
-			saveUnCrawled(exec.shutdownNow());
-			if (exec.awaitTermination(TIMEOUT, UNIT)) {
-				saveUnCrawled(exec.getCancelledTasks());
-			}
-		} finally {
-			exec = null;
-		}
-	}
+  public synchronized void stop() throws InterruptedException {
+    try {
+      saveUnCrawled(exec.shutdownNow());
+      if (exec.awaitTermination(TIMEOUT, UNIT)) {
+        saveUnCrawled(exec.getCancelledTasks());
+      }
+    } finally {
+      exec = null;
+    }
+  }
 
-	protected abstract List<URL> processPage(URL url);
+  protected abstract List<URL> processPage(URL url);
 
-	private void saveUnCrawled(List<Runnable> unCrawled) {
-		for (Runnable task : unCrawled)
-			urlsToCrawl.add(((CrawlTask) task).getPage());
-	}
+  private void saveUnCrawled(List<Runnable> unCrawled) {
+    for (Runnable task : unCrawled)
+      urlsToCrawl.add(((CrawlTask) task).getPage());
+  }
 
-	private void submitCrawlTask(URL u) {
-		exec.execute(new CrawlTask(u));
-	}
+  private void submitCrawlTask(URL u) {
+    exec.execute(new CrawlTask(u));
+  }
 
-	private class CrawlTask implements Runnable {
+  private class CrawlTask implements Runnable {
 
-		private final URL url;
-		private final int count = 1;
+    private final URL url;
+    private final int count = 1;
 
-		CrawlTask(URL url) {
-			this.url = url;
-		}
+    CrawlTask(URL url) {
+      this.url = url;
+    }
 
-		boolean alreadyCrawled() {
-			return seen.putIfAbsent(url, true) != null;
-		}
+    boolean alreadyCrawled() {
+      return seen.putIfAbsent(url, true) != null;
+    }
 
-		void markUnCrawled() {
-			seen.remove(url);
-			System.out.printf("marking %s unCrawled%n", url);
-		}
+    void markUnCrawled() {
+      seen.remove(url);
+      System.out.printf("marking %s unCrawled%n", url);
+    }
 
-		public void run() {
-			for (URL link : processPage(url)) {
-				if (Thread.currentThread().isInterrupted()) {
-					return;
-				}
-				submitCrawlTask(link);
-			}
-		}
+    public void run() {
+      for (URL link : processPage(url)) {
+        if (Thread.currentThread().isInterrupted()) {
+          return;
+        }
+        submitCrawlTask(link);
+      }
+    }
 
-		public URL getPage() {
-			return url;
-		}
-	}
+    public URL getPage() {
+      return url;
+    }
+  }
 }

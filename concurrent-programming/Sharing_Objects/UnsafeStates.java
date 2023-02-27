@@ -9,11 +9,11 @@ package net.jcip.examples;
  */
 class UnsafeStates {
 
-	private String[] states = new String[]{
-			"AK", "AL" /*...*/
-	};
+  private String[] states = new String[]{
+    "AK", "AL" /*...*/
+  };
 
-	public String[] getStates() {
-		return states;
-	}
+  public String[] getStates() {
+    return states;
+  }
 }

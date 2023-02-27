@@ -9,29 +9,29 @@ package net.jcip.examples;
  */
 public class ThisEscape {
 
-	public ThisEscape(EventSource source) {
-		source.registerListener(new EventListener() {
-			public void onEvent(Event e) {
-				doSomething(e);
-			}
-		});
-	}
+  public ThisEscape(EventSource source) {
+    source.registerListener(new EventListener() {
+      public void onEvent(Event e) {
+        doSomething(e);
+      }
+    });
+  }
 
-	void doSomething(Event e) {
-	}
+  void doSomething(Event e) {
+  }
 
-	interface EventSource {
+  interface EventSource {
 
-		void registerListener(EventListener e);
-	}
+    void registerListener(EventListener e);
+  }
 
-	interface EventListener {
+  interface EventListener {
 
-		void onEvent(Event e);
-	}
+    void onEvent(Event e);
+  }
 
-	interface Event {
+  interface Event {
 
-	}
+  }
 }
 

@@ -12,27 +12,27 @@ import java.util.concurrent.BlockingQueue;
  */
 class BrokenPrimeProducer extends Thread {
 
-	private final BlockingQueue<BigInteger> queue;
+  private final BlockingQueue<BigInteger> queue;
 
-	private volatile boolean cancelled = false;
+  private volatile boolean cancelled = false;
 
-	BrokenPrimeProducer(BlockingQueue<BigInteger> queue) {
-		this.queue = queue;
-	}
+  BrokenPrimeProducer(BlockingQueue<BigInteger> queue) {
+    this.queue = queue;
+  }
 
-	public void run() {
-		try {
-			BigInteger p = BigInteger.ONE;
-			while (!cancelled) {
-				queue.put(p = p.nextProbablePrime());
-			}
-		} catch (InterruptedException ignored) {
-		}
-	}
+  public void run() {
+    try {
+      BigInteger p = BigInteger.ONE;
+      while (!cancelled) {
+        queue.put(p = p.nextProbablePrime());
+      }
+    } catch (InterruptedException ignored) {
+    }
+  }
 
-	public void cancel() {
-		cancelled = true;
-	}
+  public void cancel() {
+    cancelled = true;
+  }
 }
 
 /*

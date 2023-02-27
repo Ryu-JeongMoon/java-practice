@@ -14,57 +14,57 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class LogWriter {
 
-	private static final int CAPACITY = 1000;
+  private static final int CAPACITY = 1000;
 
-	private final LoggerThread logger;
-	private final BlockingQueue<String> queue;
+  private final LoggerThread logger;
+  private final BlockingQueue<String> queue;
 
-	private volatile boolean shutdownRequested;
+  private volatile boolean shutdownRequested;
 
-	public LogWriter(Writer writer) {
-		this.logger = new LoggerThread(writer);
-		this.queue = new LinkedBlockingQueue<>(CAPACITY);
-	}
+  public LogWriter(Writer writer) {
+    this.logger = new LoggerThread(writer);
+    this.queue = new LinkedBlockingQueue<>(CAPACITY);
+  }
 
-	public void start() {
-		logger.start();
-	}
+  public void start() {
+    logger.start();
+  }
 
-	public void shutDown() {
-		shutdownRequested = true;
-	}
+  public void shutDown() {
+    shutdownRequested = true;
+  }
 
-	public void log(String msg) throws InterruptedException {
-		queue.put(msg);
-	}
+  public void log(String msg) throws InterruptedException {
+    queue.put(msg);
+  }
 
-	public void unsafeLog(String msg) throws InterruptedException {
-		if (shutdownRequested) {
-			throw new IllegalArgumentException("logger is shutdown");
-		}
+  public void unsafeLog(String msg) throws InterruptedException {
+    if (shutdownRequested) {
+      throw new IllegalArgumentException("logger is shutdown");
+    }
 
-		queue.put(msg);
-	}
+    queue.put(msg);
+  }
 
-	private class LoggerThread extends Thread {
+  private class LoggerThread extends Thread {
 
-		private final PrintWriter writer;
+    private final PrintWriter writer;
 
-		public LoggerThread(Writer writer) {
-			this.writer = new PrintWriter(writer, true);
-		}
+    public LoggerThread(Writer writer) {
+      this.writer = new PrintWriter(writer, true);
+    }
 
-		public void run() {
-			try {
-				while (true) {
-					writer.println(queue.take());
-				}
-			} catch (InterruptedException ignored) {
-			} finally {
-				writer.close();
-			}
-		}
-	}
+    public void run() {
+      try {
+        while (true) {
+          writer.println(queue.take());
+        }
+      } catch (InterruptedException ignored) {
+      } finally {
+        writer.close();
+      }
+    }
+  }
 }
 
 /*

@@ -9,9 +9,9 @@ package net.jcip.examples;
  */
 public class StuffIntoPublic {
 
-	public Holder holder;
+  public Holder holder;
 
-	public void initialize() {
-		holder = new Holder(42);
-	}
+  public void initialize() {
+    holder = new Holder(42);
+  }
 }
