@@ -1,11 +1,11 @@
 package net.jcip.examples;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import net.jcip.annotations.GuardedBy;
-import net.jcip.annotations.ThreadSafe;
 
 /**
  * MonitorVehicleTracker
@@ -16,7 +16,7 @@ import net.jcip.annotations.ThreadSafe;
  */
 @ThreadSafe
 public record MonitorVehicleTracker(
-	@GuardedBy("this") Map<String, MutablePoint> locations
+		@GuardedBy("this") Map<String, MutablePoint> locations
 ) {
 
 	public MonitorVehicleTracker(Map<String, MutablePoint> locations) {
@@ -43,8 +43,8 @@ public record MonitorVehicleTracker(
 	public synchronized MutablePoint getLocation(String id) {
 		MutablePoint loc = locations.get(id);
 		return loc == null
-			? null
-			: new MutablePoint(loc);
+				? null
+				: new MutablePoint(loc);
 	}
 
 	public synchronized void setLocation(String id, int x, int y) {

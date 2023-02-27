@@ -1,10 +1,10 @@
 package net.jcip.examples;
 
-import static java.util.concurrent.Executors.*;
-import static net.jcip.examples.LaunderThrowable.*;
-
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import static java.util.concurrent.Executors.newScheduledThreadPool;
+import static net.jcip.examples.LaunderThrowable.launderThrowable;
 
 /**
  * TimedRun2

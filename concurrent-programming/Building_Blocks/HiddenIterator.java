@@ -1,10 +1,10 @@
 package net.jcip.examples;
 
+import net.jcip.annotations.GuardedBy;
+
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-
-import net.jcip.annotations.GuardedBy;
 
 /**
  * HiddenIterator

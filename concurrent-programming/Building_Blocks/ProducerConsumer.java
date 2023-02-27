@@ -37,9 +37,9 @@ public class ProducerConsumer {
 		private final File root;
 
 		public FileCrawler(
-			BlockingQueue<File> fileQueue,
-			final FileFilter fileFilter,
-			File root
+				BlockingQueue<File> fileQueue,
+				final FileFilter fileFilter,
+				File root
 		) {
 			this.fileQueue = fileQueue;
 			this.root = root;

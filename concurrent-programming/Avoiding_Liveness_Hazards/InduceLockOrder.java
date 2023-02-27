@@ -12,9 +12,9 @@ public class InduceLockOrder {
 	private static final Object tieLock = new Object();
 
 	public void transferMoney(
-		final Account fromAcct,
-		final Account toAcct,
-		final DollarAmount amount
+			final Account fromAcct,
+			final Account toAcct,
+			final DollarAmount amount
 	) throws InsufficientFundsException {
 
 		class Helper {

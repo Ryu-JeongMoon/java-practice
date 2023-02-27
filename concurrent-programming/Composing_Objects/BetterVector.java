@@ -1,8 +1,8 @@
 package net.jcip.examples;
 
-import java.util.Vector;
-
 import net.jcip.annotations.ThreadSafe;
+
+import java.util.Vector;
 
 /**
  * BetterVector

@@ -1,10 +1,10 @@
 package net.jcip.examples;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * CooperatingNoDeadlock

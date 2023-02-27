@@ -1,18 +1,11 @@
 package net.jcip.examples;
 
-import java.io.IOException;
-import java.net.Socket;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.RunnableFuture;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
+
+import java.io.IOException;
+import java.net.Socket;
+import java.util.concurrent.*;
 
 interface CancellableTask<T> extends Callable<T> {
 
@@ -68,23 +61,23 @@ class CancellingExecutor extends ThreadPoolExecutor {
 	}
 
 	public CancellingExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue,
-		ThreadFactory threadFactory) {
+	                          ThreadFactory threadFactory) {
 		super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory);
 	}
 
 	public CancellingExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue,
-		RejectedExecutionHandler handler) {
+	                          RejectedExecutionHandler handler) {
 		super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, handler);
 	}
 
 	public CancellingExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue,
-		ThreadFactory threadFactory, RejectedExecutionHandler handler) {
+	                          ThreadFactory threadFactory, RejectedExecutionHandler handler) {
 		super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, handler);
 	}
 
 	protected <T> RunnableFuture<T> newTaskFor(Callable<T> callable) {
 		return callable instanceof CancellableTask
-			? ((CancellableTask<T>) callable).newTask()
-			: super.newTaskFor(callable);
+				? ((CancellableTask<T>) callable).newTask()
+				: super.newTaskFor(callable);
 	}
 }

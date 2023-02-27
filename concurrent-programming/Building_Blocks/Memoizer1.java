@@ -1,10 +1,10 @@
 package net.jcip.examples;
 
+import net.jcip.annotations.GuardedBy;
+
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
-
-import net.jcip.annotations.GuardedBy;
 
 interface Computable<A, V> {
 
@@ -49,7 +49,7 @@ public class Memoizer1<A, V> implements Computable<A, V> {
 }
 
 class ExpensiveFunction
-	implements Computable<String, BigInteger> {
+		implements Computable<String, BigInteger> {
 
 	public BigInteger compute(String arg) {
 		// after deep thought...

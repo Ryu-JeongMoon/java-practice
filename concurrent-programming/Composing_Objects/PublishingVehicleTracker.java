@@ -1,10 +1,10 @@
 package net.jcip.examples;
 
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import net.jcip.annotations.ThreadSafe;
 
 /**
  * PublishingVehicleTracker

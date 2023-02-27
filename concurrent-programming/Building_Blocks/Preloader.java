@@ -24,14 +24,13 @@ public class Preloader {
 		thread.start();
 	}
 
-	public ProductInfo get()
-		throws DataLoadException, InterruptedException {
+	public ProductInfo get() throws DataLoadException, InterruptedException {
 		try {
 			return future.get();
 		} catch (ExecutionException e) {
 			Throwable cause = e.getCause();
 			if (cause instanceof DataLoadException) {
-				throw (DataLoadException)cause;
+				throw (DataLoadException) cause;
 			} else {
 				throw LaunderThrowable.launderThrowable(cause);
 			}

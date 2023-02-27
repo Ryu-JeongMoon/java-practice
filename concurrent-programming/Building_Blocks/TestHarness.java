@@ -11,6 +11,13 @@ import java.util.concurrent.CountDownLatch;
  */
 public class TestHarness {
 
+	public static void main(String[] args) throws InterruptedException {
+		new TestHarness().timeTasks(
+				Runtime.getRuntime().availableProcessors(),
+				() -> System.out.printf("%s : YAHOO\n", Thread.currentThread().getName())
+		);
+	}
+
 	public long timeTasks(int nThreads, final Runnable task) throws InterruptedException {
 		final CountDownLatch startGate = new CountDownLatch(1);
 		final CountDownLatch endGate = new CountDownLatch(nThreads);

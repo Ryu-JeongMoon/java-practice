@@ -1,11 +1,6 @@
 package net.jcip.examples;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * Animals
@@ -76,8 +71,8 @@ public class Animals {
 		public int compare(Animal one, Animal two) {
 			int speciesCompare = one.species.compareTo(two.species);
 			return (speciesCompare != 0)
-				? speciesCompare
-				: one.gender.compareTo(two.gender);
+					? speciesCompare
+					: one.gender.compareTo(two.gender);
 		}
 	}
 

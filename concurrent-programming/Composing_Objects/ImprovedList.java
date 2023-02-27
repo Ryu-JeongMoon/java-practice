@@ -1,12 +1,8 @@
 package net.jcip.examples;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-
 import net.jcip.annotations.ThreadSafe;
+
+import java.util.*;
 
 /**
  * ImprovedList
