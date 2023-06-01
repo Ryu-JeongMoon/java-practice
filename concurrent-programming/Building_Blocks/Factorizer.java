@@ -1,10 +1,12 @@
 package net.jcip.examples;
 
 import java.math.BigInteger;
+
 import javax.servlet.GenericServlet;
 import javax.servlet.Servlet;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+
 import net.jcip.annotations.ThreadSafe;
 
 /**
@@ -41,6 +43,6 @@ public class Factorizer extends GenericServlet implements Servlet {
 
   BigInteger[] factor(BigInteger i) {
     // Doesn't really factor
-    return new BigInteger[]{ i };
+    return new BigInteger[] { i };
   }
 }

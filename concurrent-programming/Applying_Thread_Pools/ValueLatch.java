@@ -1,6 +1,7 @@
 package net.jcip.examples;
 
 import java.util.concurrent.CountDownLatch;
+
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 

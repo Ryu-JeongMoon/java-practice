@@ -2,6 +2,7 @@ package net.jcip.examples;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import net.jcip.annotations.GuardedBy;
 
 /**

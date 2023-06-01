@@ -2,6 +2,7 @@ package net.jcip.examples;
 
 import java.util.LinkedList;
 import java.util.List;
+
 import net.jcip.annotations.Immutable;
 
 /**

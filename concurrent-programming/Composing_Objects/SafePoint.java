@@ -29,7 +29,7 @@ public class SafePoint {
   // x, y를 개별적으로 가져가게 된다면
   // 그 사이에 값이 바뀌어 안전성이 깨질 수 있으므로 배열로 묶어서 반환
   public synchronized int[] get() {
-    return new int[]{ x, y };
+    return new int[] { x, y };
   }
 
   public synchronized void set(int x, int y) {

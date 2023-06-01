@@ -3,6 +3,7 @@ package net.jcip.examples;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import net.jcip.annotations.NotThreadSafe;
 import net.jcip.annotations.ThreadSafe;
 

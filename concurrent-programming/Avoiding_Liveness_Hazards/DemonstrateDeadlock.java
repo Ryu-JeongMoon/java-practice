@@ -1,6 +1,7 @@
 package net.jcip.examples;
 
 import java.util.Random;
+
 import net.jcip.examples.DynamicOrderDeadlock.Account;
 import net.jcip.examples.DynamicOrderDeadlock.DollarAmount;
 
