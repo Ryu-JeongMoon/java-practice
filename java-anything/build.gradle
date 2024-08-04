@@ -1,29 +1,38 @@
 plugins {
-    id 'org.springframework.boot' version '3.0.6'
-    id 'io.spring.dependency-management' version '1.1.0'
-    id 'java'
+  id 'org.springframework.boot' version '3.2.0'
+  id 'io.spring.dependency-management' version '1.1.0'
+  id 'java'
 }
 
 group = 'com'
 version = '0.0.1-SNAPSHOT'
 
 configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
+  compileOnly {
+    extendsFrom annotationProcessor
+  }
+
+  configureEach {
+    exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+  }
 }
 
 repositories {
-    mavenCentral()
-    maven { url 'https://repo.spring.io/milestone' }
-    maven { url 'https://repo.spring.io/snapshot' }
-    maven { url "https://plugins.gradle.org/m2/" }
+  mavenCentral()
+  maven { url 'https://repo.spring.io/milestone' }
+  maven { url 'https://repo.spring.io/snapshot' }
+  maven { url "https://plugins.gradle.org/m2/" }
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
-    implementation 'com.fasterxml.uuid:java-uuid-generator:4.1.0'
+  implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+  implementation 'org.springframework.boot:spring-boot-starter-test'
+  implementation 'com.fasterxml.uuid:java-uuid-generator:4.1.0'
 
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+  compileOnly 'org.projectlombok:lombok'
+  annotationProcessor 'org.projectlombok:lombok'
+}
+
+test {
+  useJUnitPlatform()
 }
